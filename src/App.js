@@ -2,6 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import  BooksList  from './BooksList'
+import  Search  from './Search'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -21,6 +22,15 @@ class BooksApp extends React.Component {
   	});
 
   }
+  changeShelf = (event,filterbook) => {
+    const shelf = event.target.value;
+    filterbook.shelf = event.target.value;
+    BooksAPI.update(filterbook,shelf).then(() => {
+      this.setState(state => ({
+        books:state.books.filter(book => book.id !== filterbook.id).concat([filterbook])
+      }));
+    });
+  }
 	
   render() {
     return (
@@ -28,6 +38,13 @@ class BooksApp extends React.Component {
     	<Route exact path='/' render={() => (
           <BooksList
             Books={this.state.books}
+            change={this.changeShelf}
+          />
+          )}/>
+    	<Route exact path='/search' render={() => (
+          <Search
+            Books={this.state.books}
+            change={this.changeShelf}
           />
           )}/>
     	</div>
