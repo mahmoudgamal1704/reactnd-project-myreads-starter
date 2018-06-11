@@ -1,13 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Book from './Book'
+
+import BookShelf from './BookShelf'
 
 class BooksList extends React.Component {
-	
 	render(){
-		const currentRead = this.props.Books.filter((book) => book.shelf === "currentlyReading")
-		const wantRead = this.props.Books.filter((book) => book.shelf === "wantToRead")
-		const exactRead = this.props.Books.filter((book) => book.shelf === "read")
+		const shelves = {
+		    currentlyReading: ['Currently Reading', 'currentlyReading'],
+		    wantToRead: ['Want to Read', 'wantToRead'],
+		    read: ['Read', 'read']
+	  	}
 		return (
 			<div className="list-books">
 				<div className="list-books-title">
@@ -15,18 +17,14 @@ class BooksList extends React.Component {
             	</div>
             	<div className="list-books-content">
             		<div>
-            			<div className="bookshelf">
-            				<h2 className="bookshelf-title">Currently Reading</h2>
-            				<Book filtredbooks={currentRead} change={this.props.change}/>
-						</div>
-						<div className="bookshelf">
-            				<h2 className="bookshelf-title">Want To Read</h2>
-            				<Book filtredbooks={wantRead} change={this.props.change}/>
-						</div>
-						<div className="bookshelf">
-            				<h2 className="bookshelf-title">Read</h2>
-            				<Book filtredbooks={exactRead} change={this.props.change}/>
-						</div>
+            			{ Object.keys(shelves).map((shelf) =>
+						      <BookShelf key={shelf}
+						        shelf={shelves[shelf][1]}
+						        title={shelves[shelf][0]}
+						        books={ this.props.Books }
+						        onShelfChange={ this.props.change }
+						      />
+    					)}
 					</div>
 				</div>
 				<div className="open-search">
